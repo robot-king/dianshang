@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.GenjinJiluMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.GenjinJilu" id="baseGenjinJilu">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="danziId" column="danzi_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="des" column="des" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+	<sql id="baseGenjinJilu">
+			danzi_id,
+			des,
+			create_time,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseGenjinJilu">
+    	select <include refid="baseGenjinJilu"/> from genjin_jilu where id = #{id} 
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseGenjinJilu">
+    	select <include refid="baseGenjinJilu"/> from genjin_jilu 
+    	<where>
+			<if test="id != null and id != '' ">
+        		and id = #{id} 
+    		</if>
+			<if test="danziId != null and danziId != '' ">
+        		and danzi_id = #{danziId} 
+    		</if>
+			<if test="des != null and des != '' ">
+				and des like concat(concat('%',#{des} ),'%')  
+    		</if>
+			<if test="createTime != null and createTime != '' ">
+        		and create_time = #{createTime} 
+    		</if>
+		</where>
+		order by id desc
+  	</select>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.GenjinJilu" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into genjin_jilu 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="danziId != null and danziId != '' ">  
+	        		danzi_id,
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		des,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="danziId != null and danziId != '' ">  
+	        		#{danziId,jdbcType=INTEGER},
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		#{des,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.GenjinJilu" flushCache="true">
+    	update genjin_jilu 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="danziId != null and danziId != '' ">  
+	        		danzi_id = #{danziId,jdbcType=INTEGER},
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		des = #{des,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.GenjinJilu" flushCache="true">
+    	delete from  genjin_jilu where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  genjin_jilu where id = #{id} 
+	</delete>
+	
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+        update genjin_jilu 
+		set status = #{status} where id in
+		
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+        delete from genjin_jilu where id in
+        
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+	
+	<select id="getCount"  resultType="Integer">
+    	select count(*) from genjin_jilu 
+    	<where>
+				<if test="id != null and id != '' ">  
+	        		and id = #{id}
+	    		</if>
+				<if test="danziId != null and danziId != '' ">  
+	        		and danzi_id = #{danziId}
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		and des = #{des}
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		and create_time = #{createTime}
+	    		</if>
+    	</where>
+  	</select>
+  	
+  	<update id="updateByPrimaryKey" parameterType="com.pojo.GenjinJilu">
+		update genjin_jilu 
+		set
+        	id = #{id,jdbcType=INTEGER},
+        	danzi_id = #{danziId,jdbcType=INTEGER},
+        	des = #{des,jdbcType=VARCHAR},
+        	create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id = #{id} 
+	</update>
+</mapper>

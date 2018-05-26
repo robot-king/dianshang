@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.EmployeeMenuMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.EmployeeMenu" id="baseEmployeeMenu">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="employeeId" column="employee_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="menuId" column="menu_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="status" column="status" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="adminId" column="admin_id" javaType="INTEGER" jdbcType="INTEGER"/>
+    </resultMap>
+    
+	<sql id="baseEmployeeMenu">
+			employee_id,
+			menu_id,
+			status,
+			create_time,
+			admin_id,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseEmployeeMenu">
+    	select <include refid="baseEmployeeMenu"/> from employee_menu where id = #{id} 
+  	</select>
+  	
+  	<select id="findByParmPage"  resultMap="baseEmployeeMenu">
+    	select <include refid="baseEmployeeMenu"/> from employee_menu 
+    	<where>
+			<if test="id != null and id != '' ">  
+        		and id = #{id} 
+    		</if>
+			<if test="employeeId != null and employeeId != '' ">  
+        		and employee_id = #{employeeId} 
+    		</if>
+			<if test="menuId != null and menuId != '' ">  
+        		and menu_id = #{menuId} 
+    		</if>
+			<if test="status != null and status != '' ">  
+        		and status = #{status} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">  
+        		and create_time = #{createTime} 
+    		</if>
+			<if test="adminId != null and adminId != '' ">  
+        		and admin_id = #{adminId} 
+    		</if>
+    	</where>
+    	<if test="param2.sort != null and param2.order != null ">
+    	order by ${param2.sort} ${param2.order} 
+    	</if>
+    	limit #{param2.start},#{param2.end}
+  	</select>
+  	
+  	<select id="getCount"  resultType="Integer">
+    	select count(*) from employee_menu 
+    	<where>
+				<if test="id != null and id != '' ">  
+	        		and id = #{id}
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		and employee_id = #{employeeId}
+	    		</if>
+				<if test="menuId != null and menuId != '' ">  
+	        		and menu_id = #{menuId}
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		and status = #{status}
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		and create_time = #{createTime}
+	    		</if>
+				<if test="adminId != null and adminId != '' ">  
+	        		and admin_id = #{adminId}
+	    		</if>
+    	</where>
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseEmployeeMenu">
+    	select <include refid="baseEmployeeMenu"/> from employee_menu 
+    	<where>
+			<if test="id != null and id != '' ">  
+        		and id = #{id} 
+    		</if>
+			<if test="employeeId != null and employeeId != '' ">  
+        		and employee_id = #{employeeId} 
+    		</if>
+			<if test="menuId != null and menuId != '' ">  
+        		and menu_id = #{menuId} 
+    		</if>
+			<if test="status != null and status != '' ">  
+        		and status = #{status} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">  
+        		and create_time = #{createTime} 
+    		</if>
+			<if test="adminId != null and adminId != '' ">  
+        		and admin_id = #{adminId} 
+    		</if>
+		</where>
+  	</select>
+  	
+  	<insert id="insert" parameterType="com.pojo.EmployeeMenu" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into employee_menu 
+    	(
+    	id,
+    	employee_id,
+    	menu_id,
+    	status,
+    	create_time,
+    	admin_id)
+    	 values 
+    	(
+    	#{id,jdbcType=INTEGER},
+    	#{employee_id,jdbcType=INTEGER},
+    	#{menu_id,jdbcType=INTEGER},
+    	#{status,jdbcType=INTEGER},
+    	#{create_time,jdbcType=TIMESTAMP},
+    	#{admin_id,jdbcType=INTEGER})
+  	</insert>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.EmployeeMenu" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into employee_menu 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		employee_id,
+	    		</if>
+				<if test="menuId != null and menuId != '' ">  
+	        		menu_id,
+	    		</if>
+				<if test="status != null">  
+	        		status,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+				<if test="adminId != null and adminId != '' ">  
+	        		admin_id,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		#{employeeId,jdbcType=INTEGER},
+	    		</if>
+				<if test="menuId != null and menuId != '' ">  
+	        		#{menuId,jdbcType=INTEGER},
+	    		</if>
+				<if test="status != null">  
+	        		#{status,jdbcType=INTEGER},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="adminId != null and adminId != '' ">  
+	        		#{adminId,jdbcType=INTEGER},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.EmployeeMenu" flushCache="true">
+    	update employee_menu 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		employee_id = #{employeeId,jdbcType=INTEGER},
+	    		</if>
+				<if test="menuId != null and menuId != '' ">  
+	        		menu_id = #{menuId,jdbcType=INTEGER},
+	    		</if>
+				<if test="status != null">  
+	        		status = #{status,jdbcType=INTEGER},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="adminId != null and adminId != '' ">  
+	        		admin_id = #{adminId,jdbcType=INTEGER},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<update id="updateByPrimaryKey" parameterType="com.pojo.EmployeeMenu">
+		update employee_menu 
+		set
+        	id = #{id,jdbcType=INTEGER},
+        	employee_id = #{employeeId,jdbcType=INTEGER},
+        	menu_id = #{menuId,jdbcType=INTEGER},
+        	status = #{status,jdbcType=INTEGER},
+        	create_time = #{createTime,jdbcType=TIMESTAMP},
+        	admin_id = #{adminId,jdbcType=INTEGER}
+		where id = #{id} 
+	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.EmployeeMenu" flushCache="true">
+    	delete from  employee_menu where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  employee_menu where id = #{id} 
+	</delete>
+	
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+        update employee_menu 
+		set status = #{status} where id in
+		
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+        delete from employee_menu where id in
+        
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+</mapper>

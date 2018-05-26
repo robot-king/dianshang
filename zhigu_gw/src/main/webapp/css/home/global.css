@@ -1,0 +1,224 @@
+/*公用样式*/
+*{
+	box-sizing: border-box;
+}
+body{
+	font-family:"MicroSoft YaHei",sans-serif;
+	padding-top: 70px;
+	-webkit-tap-highlight-color:transparent;
+}
+@media (max-width: 768px) {
+	body{
+		padding-top: 52px;
+	}
+}
+a{
+	text-decoration: none;
+	outline: none;
+	color: #fff;
+}
+a:hover{
+	text-decoration: none;
+	outline: none;
+}
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.clear{
+	clear: both;
+}
+.container{
+	overflow: hidden;
+}
+.t-center{
+	text-align: center;
+}
+.lh-34px{
+	line-height: 34px;
+}
+.mg-tb20{
+	margin: 30px 0;
+}
+.block-center{
+	margin: 0 auto!important;
+}
+.c-fff{
+	color: #fff!important;
+}
+.title{
+	margin-bottom: 46px;
+	text-align: center;
+}
+.title h3{
+	font-size: 26px!important;
+	color: #333;
+}
+.title p{
+	font-size: 16px!important;
+	color: #999!important;
+}
+.them-color{
+	color: #da1233;
+}
+.them-bg{
+	background: #da1233;
+}
+.no-border{
+	border:none!important;
+}
+/*导航样式*/
+.my-navbar{
+	/*background: transparent;*/
+}
+.my-navbar .navbar-brand{
+	padding: 0 15px;
+	height: 68px;
+}
+.my-navbar .navbar-brand img{
+	margin-top: 7px;
+	display: block;
+	width: auto;
+	height: 56px;
+}
+.navbar-collapse{
+	font-size: 15px;
+}
+.my-navbar .navbar-nav a{
+	padding: 0px 15px;
+	display: block;
+	height: 100%;
+	line-height: 70px;
+}
+.my-navbar .navbar-nav a:hover{
+	color: #da1233!important;
+}
+.my-navbar .navbar-nav .curr{
+	color: #da1233!important;
+	font-weight: bold;
+}
+@media(max-width: 767px){
+	.my-navbar .navbar-brand{
+		padding: 0 15px;
+		height: 44px;
+	}
+	.my-navbar .navbar-brand img{
+		margin-top: 7px;
+		height: 40px;
+	}
+	.navbar-toggle{
+		margin-top: 10px;
+	}
+	.my-navbar .navbar-nav a{
+		padding: 0px;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+	}
+}
+.my-navbar .navbar-collapse {
+    max-height: 800px;
+}
+.my-navbar button{
+	background: none!important;
+	border: none!important;
+}
+.navbar-toggle .icon-bar{
+    background-color: #333;
+}
+/*轮播图按钮*/
+.carousel-control{
+	background: none!important;
+}
+section{
+	padding: 26px 0 38px 0;
+}
+@media (max-width: 766px) {
+	section{
+		padding: 16px 0 34px 0;
+	}
+	.title{
+		margin-bottom: 30px;
+	}
+}
+/*主题按钮*/
+.them-btn{
+	display: inline-block;
+	padding: 0 20px;
+	min-width: 30px;
+	width: 30px;
+	width: auto;
+	height: 32px;
+	line-height: 32px;
+	font-size: 12px;
+	color: #fff;
+	border-radius: 20px;
+	transition: all 1s;
+}
+.them-btn:hover{
+	color: #fff;
+	background: rgba(0, 0, 0, 0.7);
+}
+/*footer*/
+footer{
+	padding: 18px;
+	text-align: center;
+	font-size: 15px;
+	color: #666;
+	background: #f8f8f8;
+}
+footer p{
+	margin:0;
+}
+/*加载页*/
+.loading{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 999999;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.6);
+	display: none;
+}
+.loading p{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 999999;
+	margin-top: -40px;
+	margin-left: -40px;
+	width: 80px;
+	height: 80px;
+	line-height: 80px;
+	border-radius: 50%;
+	background: rgba(0,0,0,0.82);
+	text-align: center;
+}
+/*分页*/
+.pager a{
+	color: #666;
+}
+.pager .yeshu span{
+	border: none;
+}
+.pager li .active{
+	background: #da1233!important;
+	color: #fff;
+}
+.pager li a:hover{
+	background: #da1233;
+	color: #fff;
+}
+/*装饰性的分割图片*/
+.fengge-img{
+	width: 100%;
+	height: auto;
+}
+.fengge-img img{
+	display: block;
+	width: 100%;
+	height: auto;
+}

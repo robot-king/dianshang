@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.DictMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.Dict" id="baseDict">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="name" column="name" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="code" column="code" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="iconUrl" column="icon_url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="parentCode" column="parent_code" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="status" column="status" javaType="INTEGER" jdbcType="INTEGER"/>
+    </resultMap>
+    
+	<sql id="baseDict">
+			name,
+			code,
+			icon_url,
+			parent_code,
+			create_time,
+			parentName,
+			status,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseDict">
+    	select <include refid="baseDict"/> from dict where id = #{id} 
+  	</select>
+  	
+  	<select id="findByParmPage"  resultMap="baseDict">
+    	select <include refid="baseDict"/> from dict 
+    	<where>
+			<if test="id != null and id != '' ">  
+        		and id = #{id} 
+    		</if>
+			<if test="name != null and name != '' ">  
+        		and name = #{name} 
+    		</if>
+			<if test="code != null and code != '' ">  
+        		and code = #{code} 
+    		</if>
+			<if test="iconUrl != null and iconUrl != '' ">  
+        		and icon_url = #{iconUrl} 
+    		</if>
+			<if test="parentCode != null and parentCode != '' ">  
+        		and parent_code = #{parentCode} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">  
+        		and create_time = #{createTime} 
+    		</if>
+			<if test="status != null and status != '' ">  
+        		and status = #{status} 
+    		</if>
+    	</where>
+    	<if test="param2.sort != null and param2.order != null ">
+    	order by ${param2.sort} ${param2.order} 
+    	</if>
+    	limit #{param2.start},#{param2.end}
+  	</select>
+  	
+  	<select id="getCount"  resultType="Integer">
+    	select count(*) from dict 
+    	<where>
+				<if test="id != null and id != '' ">  
+	        		and id = #{id}
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		and name = #{name}
+	    		</if>
+				<if test="code != null and code != '' ">  
+	        		and code = #{code}
+	    		</if>
+				<if test="iconUrl != null and iconUrl != '' ">  
+	        		and icon_url = #{iconUrl}
+	    		</if>
+				<if test="parentCode != null and parentCode != '' ">  
+	        		and parent_code = #{parentCode}
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		and create_time = #{createTime}
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		and status = #{status}
+	    		</if>
+    	</where>
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseDict">
+    	select d1.*,d2.name parentName from dict d1 left join dict d2 on d1.parent_code=d2.code
+    	<where>
+			<if test="id != null and id != '' ">  
+        		and d1.id = #{id} 
+    		</if>
+			<if test="name != null and name != '' ">  
+        		and d1.name like CONCAT(CONCAT('%', #{name}),'%')
+    		</if>
+			<if test="code != null and code != '' ">  
+        		and d1.code = #{code} 
+    		</if>
+			<if test="iconUrl != null and iconUrl != '' ">  
+        		and d1.icon_url = #{iconUrl} 
+    		</if>
+			<if test="parentCode != null and parentCode != '' ">  
+        		and d1.parent_code = #{parentCode} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">  
+        		and d1.create_time = #{createTime} 
+    		</if>
+    		<if test="status != null and status != '' ">  
+        		and d1.status = #{status} 
+    		</if>
+		</where>
+		order by d1.id
+  	</select>
+  	
+  	<insert id="insert" parameterType="com.pojo.Dict" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into dict 
+    	(
+    	id,
+    	name,
+    	code,
+    	icon_url,
+    	parent_code,
+    	create_time,
+    	status)
+    	 values 
+    	(
+    	#{id,jdbcType=INTEGER},
+    	#{name,jdbcType=VARCHAR},
+    	#{code,jdbcType=VARCHAR},
+    	#{icon_url,jdbcType=VARCHAR},
+    	#{parent_code,jdbcType=INTEGER},
+    	#{create_time,jdbcType=TIMESTAMP},
+    	#{status,jdbcType=INTEGER})
+  	</insert>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.Dict" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into dict 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		name,
+	    		</if>
+				<if test="code != null and code != '' ">  
+	        		code,
+	    		</if>
+				<if test="iconUrl != null and iconUrl != '' ">  
+	        		icon_url,
+	    		</if>
+				<if test="parentCode != null and parentCode != '' ">  
+	        		parent_code,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+				<if test="status != null">  
+	        		status,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		#{name,jdbcType=VARCHAR},
+	    		</if>
+				<if test="code != null and code != '' ">  
+	        		#{code,jdbcType=VARCHAR},
+	    		</if>
+				<if test="iconUrl != null and iconUrl != '' ">  
+	        		#{iconUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="parentCode != null and parentCode != '' ">  
+	        		#{parentCode,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="status != null">  
+	        		#{status,jdbcType=INTEGER},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.Dict" flushCache="true">
+    	update dict 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		name = #{name,jdbcType=VARCHAR},
+	    		</if>
+				<if test="code != null and code != '' ">  
+	        		code = #{code,jdbcType=VARCHAR},
+	    		</if>
+				<if test="iconUrl != null and iconUrl != '' ">  
+	        		icon_url = #{iconUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="parentCode != null and parentCode != '' ">  
+	        		parent_code = #{parentCode,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		status = #{status,jdbcType=INTEGER},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<update id="updateByPrimaryKey" parameterType="com.pojo.Dict">
+		update dict 
+		set
+        	id = #{id,jdbcType=INTEGER},
+        	name = #{name,jdbcType=VARCHAR},
+        	code = #{code,jdbcType=VARCHAR},
+        	icon_url = #{iconUrl,jdbcType=VARCHAR},
+        	parent_code = #{parentCode,jdbcType=VARCHAR},
+        	create_time = #{createTime,jdbcType=TIMESTAMP},
+        	status = #{status,jdbcType=INTEGER}
+		where id = #{id} 
+	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.Dict" flushCache="true">
+    	delete from  dict where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  dict where id = #{id} 
+	</delete>
+	
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+        update dict 
+		set status = #{status} where id in
+		
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+        delete from dict where id in
+        
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+	
+	
+	<resultMap type="com.pojo.Dict" id="baseDictByIdAndNameAndIconUrl">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="name" column="name" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="iconUrl" column="icon_url" javaType="STRING" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+	<sql id="baseDictByIdAndNameAndIconUrlSql">
+			name,
+			icon_url,
+		id
+	</sql>
+	
+	<select id="queryListByIdAndNameAndIconUrl"  resultMap="baseDictByIdAndNameAndIconUrl">
+    	select <include refid="baseDictByIdAndNameAndIconUrlSql"/> from dict 
+    	<where>
+			<if test="parentCode != null and parentCode != '' ">  
+        		and parent_code = #{parentCode} 
+    		</if>
+		</where>
+  	</select>
+  	
+  	<select id="queryListJoinDict"  resultMap="baseDict2">
+    	select d1.*,d2.name d2_name,d2.code d2_code from dict d1 left join dict d2 on d1.code=d2.parent_code
+  	</select>
+  	
+  	<resultMap type="com.pojo.Dict" id="baseDict2">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="name" column="name" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="code" column="code" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="iconUrl" column="icon_url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="parentCode" column="parent_code" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="status" column="status" javaType="INTEGER" jdbcType="INTEGER"/>
+		<collection property="childrenList" ofType="map" javaType="list">
+			<result column="d2_name" property="name"/>
+			<result column="d2_code" property="code"/>
+		</collection>
+    </resultMap>
+</mapper>

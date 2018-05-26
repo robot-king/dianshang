@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.KehuMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.Kehu" id="baseKehu">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="xingming" column="xingming" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="shouji" column="shouji" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="qq" column="qq" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="weixin" column="weixin" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="diqu" column="diqu" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="beizhu" column="beizhu" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+	<sql id="baseKehu">
+			xingming,
+			shouji,
+			qq,
+			weixin,
+			diqu,
+			beizhu,
+			create_time,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseKehu">
+    	select <include refid="baseKehu"/> from kehu where id = #{id} 
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseKehu">
+    	select <include refid="baseKehu"/> from kehu 
+    	<where>
+			<if test="id != null and id != '' ">
+        		and id = #{id} 
+    		</if>
+			<if test="xingming != null and xingming != '' ">
+				and xingming like concat(concat('%',#{xingming} ),'%')  
+    		</if>
+			<if test="shouji != null and shouji != '' ">
+				and shouji like concat(concat('%',#{shouji} ),'%')  
+    		</if>
+			<if test="qq != null and qq != '' ">
+				and qq like concat(concat('%',#{qq} ),'%')  
+    		</if>
+			<if test="weixin != null and weixin != '' ">
+				and weixin like concat(concat('%',#{weixin} ),'%')  
+    		</if>
+			<if test="diqu != null and diqu != '' ">
+				and diqu like concat(concat('%',#{diqu} ),'%')  
+    		</if>
+			<if test="beizhu != null and beizhu != '' ">
+				and beizhu like concat(concat('%',#{beizhu} ),'%')  
+    		</if>
+			<if test="createTime != null and createTime != '' ">
+        		and create_time = #{createTime} 
+    		</if>
+		</where>
+		order by id desc
+  	</select>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.Kehu" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into kehu 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="xingming != null and xingming != '' ">  
+	        		xingming,
+	    		</if>
+				<if test="shouji != null and shouji != '' ">  
+	        		shouji,
+	    		</if>
+				<if test="qq != null and qq != '' ">  
+	        		qq,
+	    		</if>
+				<if test="weixin != null and weixin != '' ">  
+	        		weixin,
+	    		</if>
+				<if test="diqu != null and diqu != '' ">  
+	        		diqu,
+	    		</if>
+				<if test="beizhu != null and beizhu != '' ">  
+	        		beizhu,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="xingming != null and xingming != '' ">  
+	        		#{xingming,jdbcType=VARCHAR},
+	    		</if>
+				<if test="shouji != null and shouji != '' ">  
+	        		#{shouji,jdbcType=VARCHAR},
+	    		</if>
+				<if test="qq != null and qq != '' ">  
+	        		#{qq,jdbcType=VARCHAR},
+	    		</if>
+				<if test="weixin != null and weixin != '' ">  
+	        		#{weixin,jdbcType=VARCHAR},
+	    		</if>
+				<if test="diqu != null and diqu != '' ">  
+	        		#{diqu,jdbcType=VARCHAR},
+	    		</if>
+				<if test="beizhu != null and beizhu != '' ">  
+	        		#{beizhu,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.Kehu" flushCache="true">
+    	update kehu 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="xingming != null and xingming != '' ">  
+	        		xingming = #{xingming,jdbcType=VARCHAR},
+	    		</if>
+				<if test="shouji != null and shouji != '' ">  
+	        		shouji = #{shouji,jdbcType=VARCHAR},
+	    		</if>
+				<if test="qq != null and qq != '' ">  
+	        		qq = #{qq,jdbcType=VARCHAR},
+	    		</if>
+				<if test="weixin != null and weixin != '' ">  
+	        		weixin = #{weixin,jdbcType=VARCHAR},
+	    		</if>
+				<if test="diqu != null and diqu != '' ">  
+	        		diqu = #{diqu,jdbcType=VARCHAR},
+	    		</if>
+				<if test="beizhu != null and beizhu != '' ">  
+	        		beizhu = #{beizhu,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.Kehu" flushCache="true">
+    	delete from  kehu where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  kehu where id = #{id} 
+	</delete>
+	
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+        update kehu 
+		set status = #{status} where id in
+		
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+        delete from kehu where id in
+        
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+	
+	<select id="getCount"  resultType="Integer">
+    	select count(*) from kehu 
+    	<where>
+				<if test="id != null and id != '' ">  
+	        		and id = #{id}
+	    		</if>
+				<if test="xingming != null and xingming != '' ">  
+	        		and xingming = #{xingming}
+	    		</if>
+				<if test="shouji != null and shouji != '' ">  
+	        		and shouji = #{shouji}
+	    		</if>
+				<if test="qq != null and qq != '' ">  
+	        		and qq = #{qq}
+	    		</if>
+				<if test="weixin != null and weixin != '' ">  
+	        		and weixin = #{weixin}
+	    		</if>
+				<if test="diqu != null and diqu != '' ">  
+	        		and diqu = #{diqu}
+	    		</if>
+				<if test="beizhu != null and beizhu != '' ">  
+	        		and beizhu = #{beizhu}
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		and create_time = #{createTime}
+	    		</if>
+    	</where>
+  	</select>
+  	
+  	<update id="updateByPrimaryKey" parameterType="com.pojo.Kehu">
+		update kehu 
+		set
+        	id = #{id,jdbcType=INTEGER},
+        	xingming = #{xingming,jdbcType=VARCHAR},
+        	shouji = #{shouji,jdbcType=VARCHAR},
+        	qq = #{qq,jdbcType=VARCHAR},
+        	weixin = #{weixin,jdbcType=VARCHAR},
+        	diqu = #{diqu,jdbcType=VARCHAR},
+        	beizhu = #{beizhu,jdbcType=VARCHAR},
+        	create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id = #{id} 
+	</update>
+</mapper>

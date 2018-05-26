@@ -1,0 +1,55 @@
+/*模板列表及案例页公用*/
+.show-thul{
+	height: 300px;
+	overflow: hidden;
+}
+.thul-img{
+	display: block;
+	height: 200px;
+	overflow: hidden;
+}
+/*服务项目页*/
+.taocan-list{
+	margin-bottom: 12px;
+	border: 1px dashed red;
+	padding: 16px 15px;
+}
+.sv-iconbox{
+	padding: 10px 0 14px 0;
+}
+@media (max-width: 767px){
+	.sv-iconbox{
+		padding: 0;
+	}
+	.sv-iconbox h4{
+		font-size: 14px;
+	}
+}
+/*模板列表页*/
+.chaxun-box{
+	margin-bottom: 20px;
+	width: 100%;
+	min-height: 30px;
+	height: auto;
+	overflow-x: auto;
+}
+.chaxun-box a{
+	padding: 0 10px;
+	float: left;
+	margin: 0 6px 6px 0;
+	min-width: 20px;
+	width: 20px;
+	width: auto;
+	height: 32px;
+	line-height: 32px;
+	text-align: center;
+	font-size: 12px;
+	color: #666;
+	border-radius: 6px;
+	border: 1px solid #ddd;
+}
+.chaxun-box .active{
+	border: none;
+	background: #da1233;
+	color: #fff;
+}

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.AccessRecordMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->
+	<!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+
+	<resultMap type="com.pojo.AccessRecord" id="baseAccessRecord">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER" />
+		<result property="ipAddress" column="ip_address" javaType="STRING"
+			jdbcType="VARCHAR" />
+		<result property="country" column="country" javaType="STRING"
+			jdbcType="VARCHAR" />
+		<result property="area" column="area" javaType="STRING"
+			jdbcType="VARCHAR" />
+		<result property="province" column="province" javaType="STRING"
+			jdbcType="VARCHAR" />
+		<result property="city" column="city" javaType="STRING"
+			jdbcType="VARCHAR" />
+		<result property="county" column="county" javaType="STRING"
+			jdbcType="VARCHAR" />
+		<result property="createTime" column="create_time" javaType="DATE"
+			jdbcType="TIMESTAMP" />
+		<result property="accessCount" column="access_count"  />
+	</resultMap>
+
+	<sql id="baseAccessRecord">
+		ip_address,
+		country,
+		area,
+		province,
+		city,
+		county,
+		create_time,
+		id
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="baseAccessRecord">
+		select
+		<include refid="baseAccessRecord" />
+		from access_record where id = #{id}
+	</select>
+
+	<select id="findByParmPage" resultMap="baseAccessRecord">
+		select
+		<include refid="baseAccessRecord" />
+		from access_record
+		<where>
+			<if test="id != null and id != '' ">
+				and id = #{id}
+			</if>
+			<if test="ipAddress != null and ipAddress != '' ">
+				and ip_address = #{ipAddress}
+			</if>
+			<if test="country != null and country != '' ">
+				and country = #{country}
+			</if>
+			<if test="area != null and area != '' ">
+				and area = #{area}
+			</if>
+			<if test="province != null and province != '' ">
+				and province = #{province}
+			</if>
+			<if test="city != null and city != '' ">
+				and city = #{city}
+			</if>
+			<if test="county != null and county != '' ">
+				and county = #{county}
+			</if>
+			<if test="createTime != null and createTime != '' ">
+				and create_time = #{createTime}
+			</if>
+		</where>
+		<if test="param2.sort != null and param2.order != null ">
+			order by ${param2.sort} ${param2.order}
+		</if>
+		limit #{param2.start},#{param2.end}
+	</select>
+
+	<select id="getCount" resultType="Integer">
+		select count(*) from access_record
+		<where>
+			<if test="id != null and id != '' ">
+				and id = #{id}
+			</if>
+			<if test="ipAddress != null and ipAddress != '' ">
+				and ip_address = #{ipAddress}
+			</if>
+			<if test="country != null and country != '' ">
+				and country = #{country}
+			</if>
+			<if test="area != null and area != '' ">
+				and area = #{area}
+			</if>
+			<if test="province != null and province != '' ">
+				and province = #{province}
+			</if>
+			<if test="city != null and city != '' ">
+				and city = #{city}
+			</if>
+			<if test="county != null and county != '' ">
+				and county = #{county}
+			</if>
+			<if test="createTime != null and createTime != '' ">
+				and create_time = #{createTime}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryList" resultMap="baseAccessRecord">
+		SELECT
+		count(DATE_FORMAT(create_time,'%m-%d-%Y')) access_count,
+		 create_time
+		FROM
+		access_record
+		WHERE
+		1 = 1
+		AND DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;= date(create_time)
+		GROUP BY DATE_FORMAT(create_time,'%m-%d-%Y')
+		ORDER BY create_time asc
+	</select>
+
+	<insert id="insert" parameterType="com.pojo.AccessRecord"
+		useGeneratedKeys="true" keyProperty="id" flushCache="true">
+		insert into
+		access_record
+		(
+		id,
+		ip_address,
+		country,
+		area,
+		province,
+		city,
+		county,
+		create_time)
+		values
+		(
+		#{id,jdbcType=INTEGER},
+		#{ip_address,jdbcType=VARCHAR},
+		#{country,jdbcType=VARCHAR},
+		#{area,jdbcType=VARCHAR},
+		#{province,jdbcType=VARCHAR},
+		#{city,jdbcType=VARCHAR},
+		#{county,jdbcType=VARCHAR},
+		#{create_time,jdbcType=TIMESTAMP})
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.pojo.AccessRecord"
+		useGeneratedKeys="true" keyProperty="id" flushCache="true">
+		insert into access_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">
+				id,
+			</if>
+			<if test="ipAddress != null and ipAddress != '' ">
+				ip_address,
+			</if>
+			<if test="country != null and country != '' ">
+				country,
+			</if>
+			<if test="area != null and area != '' ">
+				area,
+			</if>
+			<if test="province != null and province != '' ">
+				province,
+			</if>
+			<if test="city != null and city != '' ">
+				city,
+			</if>
+			<if test="county != null and county != '' ">
+				county,
+			</if>
+			<if test="createTime != null and createTime != '' ">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="ipAddress != null and ipAddress != '' ">
+				#{ipAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="country != null and country != '' ">
+				#{country,jdbcType=VARCHAR},
+			</if>
+			<if test="area != null and area != '' ">
+				#{area,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null and province != '' ">
+				#{province,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null and city != '' ">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="county != null and county != '' ">
+				#{county,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null and createTime != '' ">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.AccessRecord"
+		flushCache="true">
+		update access_record
+		<set>
+			<if test="id != null and id != '' ">
+				id = #{id,jdbcType=INTEGER},
+			</if>
+			<if test="ipAddress != null and ipAddress != '' ">
+				ip_address = #{ipAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="country != null and country != '' ">
+				country = #{country,jdbcType=VARCHAR},
+			</if>
+			<if test="area != null and area != '' ">
+				area = #{area,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null and province != '' ">
+				province = #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null and city != '' ">
+				city = #{city,jdbcType=VARCHAR},
+			</if>
+			<if test="county != null and county != '' ">
+				county = #{county,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null and createTime != '' ">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.pojo.AccessRecord">
+		update
+		access_record
+		set
+		id = #{id,jdbcType=INTEGER},
+		ip_address =
+		#{ipAddress,jdbcType=VARCHAR},
+		country = #{country,jdbcType=VARCHAR},
+		area = #{area,jdbcType=VARCHAR},
+		province =
+		#{province,jdbcType=VARCHAR},
+		city = #{city,jdbcType=VARCHAR},
+		county =
+		#{county,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP}
+		where id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="com.pojo.AccessRecord"
+		flushCache="true">
+		delete from access_record where id = #{id}
+	</delete>
+
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from
+		access_record where id = #{id}
+	</delete>
+
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+		update access_record
+		set status = #{status} where id in
+
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+		delete from access_record where id in
+
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+</mapper>

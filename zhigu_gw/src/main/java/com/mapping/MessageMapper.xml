@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.MessageMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->
+	<!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+
+	<resultMap type="com.pojo.Message" id="baseMessage">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="title" column="title" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="content" column="content" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="type" column="type" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="dialogNo" column="dialog_no" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="sendId" column="send_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="receivedId" column="received_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="status" column="status" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<association property="user" javaType="com.pojo.User">
+			<result property="iconUrl" column="icon_url1" />
+			<result property="nickName" column="nick_name" />
+			<result property="name" column="name" />
+			<result property="niMing" column="ni_ming1" />
+		</association>
+		<association property="receivedUser" javaType="com.pojo.User">
+			<result property="iconUrl" column="icon_url2" />
+			<result property="nickName" column="nick_name1" />
+			<result property="name" column="name1" />
+			<result property="niMing" column="ni_ming2" />
+		</association>
+	</resultMap>
+
+	<sql id="baseMessage">
+		title,
+			content,
+			type,
+			dialog_no,
+			send_id,
+			received_id,
+			status,
+			create_time,
+		id
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="baseMessage">
+		select
+		<include refid="baseMessage" />
+		from message where id = #{id}
+	</select>
+
+	<select id="queryList" resultMap="baseMessage">
+		select me.*,uu.nick_name,uu.name,uu.icon_url icon_url1,uu.ni_ming ni_ming1,uu2.nick_name nick_name1,uu2.name name1,uu2.icon_url icon_url2,uu2.ni_ming ni_ming2  from message me
+		 left join user uu on me.send_id=uu.id
+		 left join user uu2 on me.received_id=uu2.id
+		<where>
+			<if test="id != null and id != '' ">
+				and me.id = #{id}
+			</if>
+			<if test="title != null and title != '' ">
+				and me.title = #{title}
+			</if>
+			<if test="content != null and content != '' ">
+				and me.content = #{content}
+			</if>
+			<if test="dialogNo != null and dialogNo != '' ">
+				and dialog_no = #{dialogNo}
+    		</if>
+			<if test="type != null and type != '' ">
+				and me.type = #{type}
+			</if>
+			<if test="sendId != null and sendId != '' ">
+				and me.send_id = #{sendId}
+			</if>
+			<if test="receivedId != null and receivedId != '' ">
+				and me.received_id = #{receivedId}
+			</if>
+			<if test="status != null and status != '' ">
+				and me.status = #{status}
+			</if>
+			<if test="createTime != null and createTime != '' ">
+				and me.create_time = #{createTime}
+			</if>
+			<if test="isHaoyouMessage == 1">
+				and me.type in (3,4,5,6)
+			</if>
+			<if test="isHaoyouMessage == 2">
+				and me.type in (1,2,7)
+			</if>
+		</where>
+		order by me.create_time desc
+	</select>
+
+	<insert id="insertSelective" parameterType="com.pojo.Message" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into message 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="title != null and title != '' ">  
+	        		title,
+	    		</if>
+				<if test="content != null and content != '' ">  
+	        		content,
+	    		</if>
+				<if test="type != null and type != '' ">  
+	        		type,
+	    		</if>
+				<if test="dialogNo != null and dialogNo != '' ">  
+	        		dialog_no,
+	    		</if>
+				<if test="sendId != null and sendId != '' ">  
+	        		send_id,
+	    		</if>
+				<if test="receivedId != null and receivedId != '' ">  
+	        		received_id,
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		status,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="title != null and title != '' ">  
+	        		#{title,jdbcType=VARCHAR},
+	    		</if>
+				<if test="content != null and content != '' ">  
+	        		#{content,jdbcType=VARCHAR},
+	    		</if>
+				<if test="type != null and type != '' ">  
+	        		#{type,jdbcType=INTEGER},
+	    		</if>
+				<if test="dialogNo != null and dialogNo != '' ">  
+	        		#{dialogNo,jdbcType=VARCHAR},
+	    		</if>
+				<if test="sendId != null and sendId != '' ">  
+	        		#{sendId,jdbcType=INTEGER},
+	    		</if>
+				<if test="receivedId != null and receivedId != '' ">  
+	        		#{receivedId,jdbcType=INTEGER},
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		#{status,jdbcType=INTEGER},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.Message" flushCache="true">
+    	update message 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="title != null and title != '' ">  
+	        		title = #{title,jdbcType=VARCHAR},
+	    		</if>
+				<if test="content != null and content != '' ">  
+	        		content = #{content,jdbcType=VARCHAR},
+	    		</if>
+				<if test="type != null and type != '' ">  
+	        		type = #{type,jdbcType=INTEGER},
+	    		</if>
+				<if test="dialogNo != null and dialogNo != '' ">  
+	        		dialog_no = #{dialogNo,jdbcType=VARCHAR},
+	    		</if>
+				<if test="sendId != null and sendId != '' ">  
+	        		send_id = #{sendId,jdbcType=INTEGER},
+	    		</if>
+				<if test="receivedId != null and receivedId != '' ">  
+	        		received_id = #{receivedId,jdbcType=INTEGER},
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		status = #{status,jdbcType=INTEGER},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+
+	<delete id="delete" parameterType="com.pojo.Message" flushCache="true">
+		delete from message where id = #{id}
+	</delete>
+
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from
+		message where id = #{id}
+	</delete>
+
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+		update message
+		set status = #{status} where id in
+
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+		delete from message where id in
+
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+	
+	<select id="queryListByDialog" resultMap="baseMessage">
+		select me.*,uu.nick_name,uu.name,uu.icon_url icon_url1,uu.ni_ming ni_ming1,uu2.nick_name nick_name1,uu2.name name1,uu2.icon_url icon_url2,uu2.ni_ming ni_ming2  from message me
+		 left join user uu on me.send_id=uu.id
+		 left join user uu2 on me.received_id=uu2.id
+		<where>
+			<if test="id != null and id != '' ">
+				and me.id = #{id}
+			</if>
+			<if test="title != null and title != '' ">
+				and me.title = #{title}
+			</if>
+			<if test="content != null and content != '' ">
+				and me.content = #{content}
+			</if>
+			<if test="dialogNo != null and dialogNo != '' ">
+				and dialog_no = #{dialogNo}
+    		</if>
+			<if test="type != null and type != '' ">
+				and me.type = #{type}
+			</if>
+			<if test="sendId != null and sendId != '' ">
+				and me.send_id = #{sendId}
+			</if>
+			<if test="receivedId != null and receivedId != '' ">
+				and me.received_id = #{receivedId}
+			</if>
+			<if test="status != null and status != '' ">
+				and me.status = #{status}
+			</if>
+			<if test="createTime != null and createTime != '' ">
+				and me.create_time = #{createTime}
+			</if>
+		</where>
+	</select>
+</mapper>

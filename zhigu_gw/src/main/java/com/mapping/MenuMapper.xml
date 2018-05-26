@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.MenuMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.Menu" id="baseMenu">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="code" column="code" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="name" column="name" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="url" column="url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="parentCode" column="parent_code" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="sortNum" column="sort_num" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="status" column="status" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="parentId" column="parent_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="parentName" column="parent_name" javaType="STRING" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+	<sql id="baseMenu">
+			code,
+			name,
+			url,
+			parent_code,
+			sort_num,
+			status,
+			create_time,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseMenu">
+    	select <include refid="baseMenu"/> from menu where id = #{id} 
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseMenu">
+    	select m1.*,m2.id parent_id,m2.name parent_name from menu m1 left join menu m2 on m1.parent_code = m2.code
+    	<where>
+			<if test="id != null and id != '' ">  
+        		and m1.id = #{id} 
+    		</if>
+			<if test="code != null and code != '' ">  
+        		and m1.code = #{code} 
+    		</if>
+			<if test="name != null and name != '' ">  
+        		and m1.name = #{name} 
+    		</if>
+			<if test="url != null and url != '' ">  
+        		and m1.url = #{url} 
+    		</if>
+			<if test="parentCode != null and parentCode != '' ">  
+        		and m1.parent_code = #{parentCode} 
+    		</if>
+			<if test="status != null and status != '' ">  
+        		and m1.status = #{status} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">  
+        		and m1.create_time = #{createTime} 
+    		</if>
+		</where>
+		order by m1.sort_num asc
+  	</select>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.Menu" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into menu 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="code != null and code != '' ">  
+	        		code,
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		name,
+	    		</if>
+				<if test="url != null and url != '' ">  
+	        		url,
+	    		</if>
+				<if test="parentCode != null and parentCode != '' ">  
+	        		parent_code,
+	    		</if>
+				<if test="sortNum != null and sortNum != '' ">  
+	        		sort_num,
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		status,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="code != null and code != '' ">  
+	        		#{code,jdbcType=VARCHAR},
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		#{name,jdbcType=VARCHAR},
+	    		</if>
+				<if test="url != null and url != '' ">  
+	        		#{url,jdbcType=VARCHAR},
+	    		</if>
+				<if test="parentCode != null and parentCode != '' ">  
+	        		#{parentCode,jdbcType=VARCHAR},
+	    		</if>
+				<if test="sortNum != null and sortNum != '' ">  
+	        		#{sortNum,jdbcType=INTEGER},
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		#{status,jdbcType=INTEGER},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.Menu" flushCache="true">
+    	update menu 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="code != null and code != '' ">  
+	        		code = #{code,jdbcType=VARCHAR},
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		name = #{name,jdbcType=VARCHAR},
+	    		</if>
+				<if test="url != null and url != '' ">  
+	        		url = #{url,jdbcType=VARCHAR},
+	    		</if>
+				<if test="parentCode != null and parentCode != '' ">  
+	        		parent_code = #{parentCode,jdbcType=VARCHAR},
+	    		</if>
+				<if test="sortNum != null and sortNum != '' ">  
+	        		sort_num = #{sortNum,jdbcType=INTEGER},
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		status = #{status,jdbcType=INTEGER},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.Menu" flushCache="true">
+    	delete from  menu where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  menu where id = #{id} 
+	</delete>
+	
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+        update menu 
+		set status = #{status} where id in
+		
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+        delete from menu where id in
+        
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+	
+	<select id="queryListByEmployeeId"  resultMap="baseMenu" parameterType="integer">
+    	SELECT me.*, me2.id parent_id FROM employee_menu em LEFT JOIN menu me ON em.menu_id = me.id LEFT JOIN menu me2 ON me.parent_code = me2. CODE WHERE em.employee_id = #{employeeId} AND me.status != 3 and em.status != 3 GROUP BY me.id
+    	order by me.sort_num asc
+  	</select>
+</mapper>

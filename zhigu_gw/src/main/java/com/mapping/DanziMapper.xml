@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.DanziMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.Danzi" id="baseDanzi">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="des" column="des" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="kehuId" column="kehu_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="laiyuan" column="laiyuan" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="yixiangStatus" column="yixiang_status" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="danziStatus" column="danzi_status" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="startTime" column="start_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="endTime" column="end_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="baojiaMoney" column="baojia_money" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="chengjiaoMoney" column="chengjiao_money" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="fukuanTime" column="fukuan_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="shijiEndTime" column="shiji_end_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="kehuName" column="xingming" javaType="STRING" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+	<sql id="baseDanzi">
+			des,
+			kehu_id,
+			laiyuan,
+			yixiang_status,
+			danzi_status,
+			start_time,
+			end_time,
+			baojia_money,
+			chengjiao_money,
+			fukuan_time,
+			shiji_end_time,
+			create_time,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseDanzi">
+    	select <include refid="baseDanzi"/> from danzi where id = #{id} 
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseDanzi">
+    	select d.*,k.xingming from danzi d 
+    	left join kehu k on d.kehu_id = k.id 
+    	<where>
+			<if test="id != null and id != '' ">
+        		and d.id = #{id} 
+    		</if>
+			<if test="des != null and des != '' ">
+				and d.des like concat(concat('%',#{des} ),'%')  
+    		</if>
+			<if test="kehuId != null and kehuId != '' ">
+        		and d.kehu_id = #{kehuId} 
+    		</if>
+			<if test="laiyuan != null and laiyuan != '' ">
+				and d.laiyuan like concat(concat('%',#{laiyuan} ),'%')  
+    		</if>
+			<if test="yixiangStatus != null and yixiangStatus != '' ">
+				and d.yixiang_status like concat(concat('%',#{yixiangStatus} ),'%')  
+    		</if>
+			<if test="danziStatus != null and danziStatus != '' ">
+				and d.danzi_status like concat(concat('%',#{danziStatus} ),'%')  
+    		</if>
+			<if test="startTime != null and startTime != '' ">
+        		and d.start_time = #{startTime} 
+    		</if>
+			<if test="endTime != null and endTime != '' ">
+        		and d.end_time = #{endTime} 
+    		</if>
+			<if test="baojiaMoney != null and baojiaMoney != '' ">
+				and d.baojia_money like concat(concat('%',#{baojiaMoney} ),'%')  
+    		</if>
+			<if test="chengjiaoMoney != null and chengjiaoMoney != '' ">
+				and d.chengjiao_money like concat(concat('%',#{chengjiaoMoney} ),'%')  
+    		</if>
+			<if test="fukuanTime != null and fukuanTime != '' ">
+        		and d.fukuan_time = #{fukuanTime} 
+    		</if>
+			<if test="shijiEndTime != null and shijiEndTime != '' ">
+        		and d.shiji_end_time = #{shijiEndTime} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">
+        		and d.create_time = #{createTime} 
+    		</if>
+		</where>
+		order by d.id desc
+  	</select>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.Danzi" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into danzi 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		des,
+	    		</if>
+				<if test="kehuId != null and kehuId != '' ">  
+	        		kehu_id,
+	    		</if>
+				<if test="laiyuan != null and laiyuan != '' ">  
+	        		laiyuan,
+	    		</if>
+				<if test="yixiangStatus != null and yixiangStatus != '' ">  
+	        		yixiang_status,
+	    		</if>
+				<if test="danziStatus != null and danziStatus != '' ">  
+	        		danzi_status,
+	    		</if>
+				<if test="startTime != null and startTime != '' ">  
+	        		start_time,
+	    		</if>
+				<if test="endTime != null and endTime != '' ">  
+	        		end_time,
+	    		</if>
+				<if test="baojiaMoney != null and baojiaMoney != '' ">  
+	        		baojia_money,
+	    		</if>
+				<if test="chengjiaoMoney != null and chengjiaoMoney != '' ">  
+	        		chengjiao_money,
+	    		</if>
+				<if test="fukuanTime != null and fukuanTime != '' ">  
+	        		fukuan_time,
+	    		</if>
+				<if test="shijiEndTime != null and shijiEndTime != '' ">  
+	        		shiji_end_time,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		#{des,jdbcType=VARCHAR},
+	    		</if>
+				<if test="kehuId != null and kehuId != '' ">  
+	        		#{kehuId,jdbcType=INTEGER},
+	    		</if>
+				<if test="laiyuan != null and laiyuan != '' ">  
+	        		#{laiyuan,jdbcType=VARCHAR},
+	    		</if>
+				<if test="yixiangStatus != null and yixiangStatus != '' ">  
+	        		#{yixiangStatus,jdbcType=VARCHAR},
+	    		</if>
+				<if test="danziStatus != null and danziStatus != '' ">  
+	        		#{danziStatus,jdbcType=VARCHAR},
+	    		</if>
+				<if test="startTime != null and startTime != '' ">  
+	        		#{startTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="endTime != null and endTime != '' ">  
+	        		#{endTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="baojiaMoney != null and baojiaMoney != '' ">  
+	        		#{baojiaMoney,jdbcType=VARCHAR},
+	    		</if>
+				<if test="chengjiaoMoney != null and chengjiaoMoney != '' ">  
+	        		#{chengjiaoMoney,jdbcType=VARCHAR},
+	    		</if>
+				<if test="fukuanTime != null and fukuanTime != '' ">  
+	        		#{fukuanTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="shijiEndTime != null and shijiEndTime != '' ">  
+	        		#{shijiEndTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.Danzi" flushCache="true">
+    	update danzi 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		des = #{des,jdbcType=VARCHAR},
+	    		</if>
+				<if test="kehuId != null and kehuId != '' ">  
+	        		kehu_id = #{kehuId,jdbcType=INTEGER},
+	    		</if>
+				<if test="laiyuan != null and laiyuan != '' ">  
+	        		laiyuan = #{laiyuan,jdbcType=VARCHAR},
+	    		</if>
+				<if test="yixiangStatus != null and yixiangStatus != '' ">  
+	        		yixiang_status = #{yixiangStatus,jdbcType=VARCHAR},
+	    		</if>
+				<if test="danziStatus != null and danziStatus != '' ">  
+	        		danzi_status = #{danziStatus,jdbcType=VARCHAR},
+	    		</if>
+				<if test="startTime != null and startTime != '' ">  
+	        		start_time = #{startTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="endTime != null and endTime != '' ">  
+	        		end_time = #{endTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="baojiaMoney != null and baojiaMoney != '' ">  
+	        		baojia_money = #{baojiaMoney,jdbcType=VARCHAR},
+	    		</if>
+				<if test="chengjiaoMoney != null and chengjiaoMoney != '' ">  
+	        		chengjiao_money = #{chengjiaoMoney,jdbcType=VARCHAR},
+	    		</if>
+				<if test="fukuanTime != null and fukuanTime != '' ">  
+	        		fukuan_time = #{fukuanTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="shijiEndTime != null and shijiEndTime != '' ">  
+	        		shiji_end_time = #{shijiEndTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.Danzi" flushCache="true">
+    	delete from  danzi where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  danzi where id = #{id} 
+	</delete>
+	
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+        update danzi 
+		set status = #{status} where id in
+		
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+        delete from danzi where id in
+        
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+	
+	<select id="getCount"  resultType="Integer">
+    	select count(*) from danzi 
+    	<where>
+				<if test="id != null and id != '' ">  
+	        		and id = #{id}
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		and des = #{des}
+	    		</if>
+				<if test="kehuId != null and kehuId != '' ">  
+	        		and kehu_id = #{kehuId}
+	    		</if>
+				<if test="laiyuan != null and laiyuan != '' ">  
+	        		and laiyuan = #{laiyuan}
+	    		</if>
+				<if test="yixiangStatus != null and yixiangStatus != '' ">  
+	        		and yixiang_status = #{yixiangStatus}
+	    		</if>
+				<if test="danziStatus != null and danziStatus != '' ">  
+	        		and danzi_status = #{danziStatus}
+	    		</if>
+				<if test="startTime != null and startTime != '' ">  
+	        		and start_time = #{startTime}
+	    		</if>
+				<if test="endTime != null and endTime != '' ">  
+	        		and end_time = #{endTime}
+	    		</if>
+				<if test="baojiaMoney != null and baojiaMoney != '' ">  
+	        		and baojia_money = #{baojiaMoney}
+	    		</if>
+				<if test="chengjiaoMoney != null and chengjiaoMoney != '' ">  
+	        		and chengjiao_money = #{chengjiaoMoney}
+	    		</if>
+				<if test="fukuanTime != null and fukuanTime != '' ">  
+	        		and fukuan_time = #{fukuanTime}
+	    		</if>
+				<if test="shijiEndTime != null and shijiEndTime != '' ">  
+	        		and shiji_end_time = #{shijiEndTime}
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		and create_time = #{createTime}
+	    		</if>
+    	</where>
+  	</select>
+  	
+  	<update id="updateByPrimaryKey" parameterType="com.pojo.Danzi">
+		update danzi 
+		set
+        	id = #{id,jdbcType=INTEGER},
+        	des = #{des,jdbcType=VARCHAR},
+        	kehu_id = #{kehuId,jdbcType=INTEGER},
+        	laiyuan = #{laiyuan,jdbcType=VARCHAR},
+        	yixiang_status = #{yixiangStatus,jdbcType=VARCHAR},
+        	danzi_status = #{danziStatus,jdbcType=VARCHAR},
+        	start_time = #{startTime,jdbcType=TIMESTAMP},
+        	end_time = #{endTime,jdbcType=TIMESTAMP},
+        	baojia_money = #{baojiaMoney,jdbcType=VARCHAR},
+        	chengjiao_money = #{chengjiaoMoney,jdbcType=VARCHAR},
+        	fukuan_time = #{fukuanTime,jdbcType=TIMESTAMP},
+        	shiji_end_time = #{shijiEndTime,jdbcType=TIMESTAMP},
+        	create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id = #{id} 
+	</update>
+</mapper>

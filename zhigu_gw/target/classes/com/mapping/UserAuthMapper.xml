@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.UserAuthMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.UserAuth" id="baseUserAuth">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="userId" column="user_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="identityType" column="identity_type" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="identifier" column="identifier" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="credential" column="credential" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+	<sql id="baseUserAuth">
+			user_id,
+			identity_type,
+			identifier,
+			credential,
+			create_time,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseUserAuth">
+    	select <include refid="baseUserAuth"/> from user_auth where id = #{id} 
+  	</select>
+  	
+  	<select id="findByParmPage"  resultMap="baseUserAuth">
+    	select <include refid="baseUserAuth"/> from user_auth 
+    	<where>
+			<if test="id != null and id != '' ">  
+        		and id = #{id} 
+    		</if>
+			<if test="userId != null and userId != '' ">  
+        		and user_id = #{userId} 
+    		</if>
+			<if test="identityType != null and identityType != '' ">  
+        		and identity_type = #{identityType} 
+    		</if>
+			<if test="identifier != null and identifier != '' ">  
+        		and identifier = #{identifier} 
+    		</if>
+			<if test="credential != null and credential != '' ">  
+        		and credential = #{credential} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">  
+        		and create_time = #{createTime} 
+    		</if>
+    	</where>
+    	<if test="param2.sort != null and param2.order != null ">
+    	order by ${param2.sort} ${param2.order} 
+    	</if>
+    	limit #{param2.start},#{param2.end}
+  	</select>
+  	
+  	<select id="getCount"  resultType="Integer">
+    	select count(*) from user_auth 
+    	<where>
+				<if test="id != null and id != '' ">  
+	        		and id = #{id}
+	    		</if>
+				<if test="userId != null and userId != '' ">  
+	        		and user_id = #{userId}
+	    		</if>
+				<if test="identityType != null and identityType != '' ">  
+	        		and identity_type = #{identityType}
+	    		</if>
+				<if test="identifier != null and identifier != '' ">  
+	        		and identifier = #{identifier}
+	    		</if>
+				<if test="credential != null and credential != '' ">  
+	        		and credential = #{credential}
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		and create_time = #{createTime}
+	    		</if>
+    	</where>
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseUserAuth">
+    	select <include refid="baseUserAuth"/> from user_auth 
+    	<where>
+			<if test="id != null and id != '' ">  
+        		and id = #{id} 
+    		</if>
+			<if test="userId != null and userId != '' ">  
+        		and user_id = #{userId} 
+    		</if>
+			<if test="identityType != null and identityType != '' ">  
+        		and identity_type = #{identityType} 
+    		</if>
+			<if test="identifier != null and identifier != '' ">  
+        		and identifier = #{identifier} 
+    		</if>
+			<if test="credential != null and credential != '' ">  
+        		and credential = #{credential} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">  
+        		and create_time = #{createTime} 
+    		</if>
+		</where>
+  	</select>
+  	
+  	<insert id="insert" parameterType="com.pojo.UserAuth" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into user_auth 
+    	(
+    	id,
+    	user_id,
+    	identity_type,
+    	identifier,
+    	credential,
+    	create_time)
+    	 values 
+    	(
+    	#{id,jdbcType=INTEGER},
+    	#{user_id,jdbcType=INTEGER},
+    	#{identity_type,jdbcType=INTEGER},
+    	#{identifier,jdbcType=VARCHAR},
+    	#{credential,jdbcType=VARCHAR},
+    	#{create_time,jdbcType=TIMESTAMP})
+  	</insert>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.UserAuth" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into user_auth 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="userId != null and userId != '' ">  
+	        		user_id,
+	    		</if>
+				<if test="identityType != null and identityType != '' ">  
+	        		identity_type,
+	    		</if>
+				<if test="identifier != null and identifier != '' ">  
+	        		identifier,
+	    		</if>
+				<if test="credential != null and credential != '' ">  
+	        		credential,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="userId != null and userId != '' ">  
+	        		#{userId,jdbcType=INTEGER},
+	    		</if>
+				<if test="identityType != null and identityType != '' ">  
+	        		#{identityType,jdbcType=INTEGER},
+	    		</if>
+				<if test="identifier != null and identifier != '' ">  
+	        		#{identifier,jdbcType=VARCHAR},
+	    		</if>
+				<if test="credential != null and credential != '' ">  
+	        		#{credential,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.UserAuth" flushCache="true">
+    	update user_auth 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="userId != null and userId != '' ">  
+	        		user_id = #{userId,jdbcType=INTEGER},
+	    		</if>
+				<if test="identityType != null and identityType != '' ">  
+	        		identity_type = #{identityType,jdbcType=INTEGER},
+	    		</if>
+				<if test="identifier != null and identifier != '' ">  
+	        		identifier = #{identifier,jdbcType=VARCHAR},
+	    		</if>
+				<if test="credential != null and credential != '' ">  
+	        		credential = #{credential,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<update id="updateByPrimaryKey" parameterType="com.pojo.UserAuth">
+		update user_auth 
+		set
+        	id = #{id,jdbcType=INTEGER},
+        	user_id = #{userId,jdbcType=INTEGER},
+        	identity_type = #{identityType,jdbcType=INTEGER},
+        	identifier = #{identifier,jdbcType=VARCHAR},
+        	credential = #{credential,jdbcType=VARCHAR},
+        	create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id = #{id} 
+	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.UserAuth" flushCache="true">
+    	delete from  user_auth where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  user_auth where id = #{id} 
+	</delete>
+</mapper>

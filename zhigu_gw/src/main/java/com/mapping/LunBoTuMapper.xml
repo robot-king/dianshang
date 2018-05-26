@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.LunBoTuMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.LunBoTu" id="baseLunBoTu">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="employeeId" column="employee_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="bannerUrl" column="banner_url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="targetUrl" column="target_url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="status" column="status" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+	<sql id="baseLunBoTu">
+			employee_id,
+			banner_url,
+			target_url,
+			status,
+			create_time,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseLunBoTu">
+    	select <include refid="baseLunBoTu"/> from lun_bo_tu where id = #{id} 
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseLunBoTu">
+    	select <include refid="baseLunBoTu"/> from lun_bo_tu 
+    	<where>
+			<if test="id != null and id != '' ">
+        		and id = #{id} 
+    		</if>
+			<if test="employeeId != null and employeeId != '' ">
+        		and employee_id = #{employeeId} 
+    		</if>
+			<if test="bannerUrl != null and bannerUrl != '' ">
+				and banner_url like concat(concat('%',#{bannerUrl} ),'%')  
+    		</if>
+    		<if test="targetUrl != null and targetUrl != '' ">
+				and target_url = #{targetUrl} 
+    		</if>
+			<if test="status != null and status != '' ">
+        		and status = #{status} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">
+        		and create_time = #{createTime} 
+    		</if>
+		</where>
+  	</select>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.LunBoTu" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into lun_bo_tu 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		employee_id,
+	    		</if>
+				<if test="bannerUrl != null and bannerUrl != '' ">  
+	        		banner_url,
+	    		</if>
+	    		<if test="targetUrl != null and targetUrl != '' ">  
+	        		target_url,
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		status,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		#{employeeId,jdbcType=INTEGER},
+	    		</if>
+				<if test="bannerUrl != null and bannerUrl != '' ">  
+	        		#{bannerUrl,jdbcType=VARCHAR},
+	    		</if>
+	    		<if test="targetUrl != null and targetUrl != '' ">  
+	        		#{targetUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		#{status,jdbcType=INTEGER},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.LunBoTu" flushCache="true">
+    	update lun_bo_tu 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		employee_id = #{employeeId,jdbcType=INTEGER},
+	    		</if>
+				<if test="bannerUrl != null and bannerUrl != '' ">  
+	        		banner_url = #{bannerUrl,jdbcType=VARCHAR},
+	    		</if>
+	    		<if test="targetUrl != null and targetUrl != '' ">  
+	        		target_url = #{targetUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		status = #{status,jdbcType=INTEGER},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.LunBoTu" flushCache="true">
+    	delete from  lun_bo_tu where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  lun_bo_tu where id = #{id} 
+	</delete>
+	
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+        update lun_bo_tu 
+		set status = #{status} where id in
+		
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+        delete from lun_bo_tu where id in
+        
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+	
+	<select id="getCount"  resultType="Integer">
+    	select count(*) from lun_bo_tu 
+    	<where>
+				<if test="id != null and id != '' ">  
+	        		and id = #{id}
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		and employee_id = #{employeeId}
+	    		</if>
+				<if test="bannerUrl != null and bannerUrl != '' ">  
+	        		and banner_url = #{bannerUrl}
+	    		</if>
+				<if test="status != null and status != '' ">  
+	        		and status = #{status}
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		and create_time = #{createTime}
+	    		</if>
+    	</where>
+  	</select>
+</mapper>

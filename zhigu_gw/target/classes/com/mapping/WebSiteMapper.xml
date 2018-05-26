@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.WebSiteMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.WebSite" id="baseWebSite">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="title" column="title" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="coverUrl" column="cover_url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="price" column="price" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="accessUrl" column="access_url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="feiAccessUrl" column="fei_access_url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="type" column="type" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="webType" column="web_type" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+	<sql id="baseWebSite">
+			title,
+			cover_url,
+			price,
+			access_url,
+			fei_access_url,
+			type,
+			web_type,
+			create_time,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseWebSite">
+    	select <include refid="baseWebSite"/> from web_site where id = #{id} 
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseWebSite">
+    	select <include refid="baseWebSite"/> from web_site 
+    	<where>
+			<if test="id != null and id != '' ">
+        		and id = #{id} 
+    		</if>
+			<if test="title != null and title != '' ">
+				and title like concat(concat('%',#{title} ),'%')  
+    		</if>
+			<if test="coverUrl != null and coverUrl != '' ">
+				and cover_url like concat(concat('%',#{coverUrl} ),'%')  
+    		</if>
+			<if test="price != null and price != '' ">
+				and price like concat(concat('%',#{price} ),'%')  
+    		</if>
+			<if test="accessUrl != null and accessUrl != '' ">
+				and access_url like concat(concat('%',#{accessUrl} ),'%')  
+    		</if>
+			<if test="feiAccessUrl != null and feiAccessUrl != '' ">
+				and fei_access_url like concat(concat('%',#{feiAccessUrl} ),'%')  
+    		</if>
+			<if test="type != null and type != '' ">
+        		<if test="type == 1 ">
+	        		and type = #{type} 
+	    		</if>
+	    		<if test="type == 2 ">
+	        		and (type = 2 or type = 3)  
+	    		</if>
+    		</if>
+			<if test="webType != null and webType != '' ">
+				and web_type like concat(concat('%',#{webType} ),'%')  
+    		</if>
+			<if test="createTime != null and createTime != '' ">
+        		and create_time = #{createTime} 
+    		</if>
+		</where>
+		order by id desc
+  	</select>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.WebSite" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into web_site 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="title != null and title != '' ">  
+	        		title,
+	    		</if>
+				<if test="coverUrl != null and coverUrl != '' ">  
+	        		cover_url,
+	    		</if>
+				<if test="price != null and price != '' ">  
+	        		price,
+	    		</if>
+				<if test="accessUrl != null and accessUrl != '' ">  
+	        		access_url,
+	    		</if>
+				<if test="feiAccessUrl != null and feiAccessUrl != '' ">  
+	        		fei_access_url,
+	    		</if>
+				<if test="type != null and type != '' ">  
+	        		type,
+	    		</if>
+				<if test="webType != null and webType != '' ">  
+	        		web_type,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="title != null and title != '' ">  
+	        		#{title,jdbcType=VARCHAR},
+	    		</if>
+				<if test="coverUrl != null and coverUrl != '' ">  
+	        		#{coverUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="price != null and price != '' ">  
+	        		#{price,jdbcType=VARCHAR},
+	    		</if>
+				<if test="accessUrl != null and accessUrl != '' ">  
+	        		#{accessUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="feiAccessUrl != null and feiAccessUrl != '' ">  
+	        		#{feiAccessUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="type != null and type != '' ">  
+	        		#{type,jdbcType=INTEGER},
+	    		</if>
+				<if test="webType != null and webType != '' ">  
+	        		#{webType,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.WebSite" flushCache="true">
+    	update web_site 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="title != null and title != '' ">  
+	        		title = #{title,jdbcType=VARCHAR},
+	    		</if>
+				<if test="coverUrl != null and coverUrl != '' ">  
+	        		cover_url = #{coverUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="price != null and price != '' ">  
+	        		price = #{price,jdbcType=VARCHAR},
+	    		</if>
+				<if test="accessUrl != null and accessUrl != '' ">  
+	        		access_url = #{accessUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="feiAccessUrl != null and feiAccessUrl != '' ">  
+	        		fei_access_url = #{feiAccessUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="type != null and type != '' ">  
+	        		type = #{type,jdbcType=INTEGER},
+	    		</if>
+				<if test="webType != null and webType != '' ">  
+	        		web_type = #{webType,jdbcType=VARCHAR},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.WebSite" flushCache="true">
+    	delete from  web_site where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  web_site where id = #{id} 
+	</delete>
+	
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+        update web_site 
+		set status = #{status} where id in
+		
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+        delete from web_site where id in
+        
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+	
+	<select id="getCount"  resultType="Integer">
+    	select count(*) from web_site 
+    	<where>
+				<if test="id != null and id != '' ">  
+	        		and id = #{id}
+	    		</if>
+				<if test="title != null and title != '' ">  
+	        		and title = #{title}
+	    		</if>
+				<if test="coverUrl != null and coverUrl != '' ">  
+	        		and cover_url = #{coverUrl}
+	    		</if>
+				<if test="price != null and price != '' ">  
+	        		and price = #{price}
+	    		</if>
+				<if test="accessUrl != null and accessUrl != '' ">  
+	        		and access_url = #{accessUrl}
+	    		</if>
+				<if test="feiAccessUrl != null and feiAccessUrl != '' ">  
+	        		and fei_access_url = #{feiAccessUrl}
+	    		</if>
+				<if test="type != null and type != '' ">  
+	        		and type = #{type}
+	    		</if>
+				<if test="webType != null and webType != '' ">  
+	        		and web_type = #{webType}
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		and create_time = #{createTime}
+	    		</if>
+    	</where>
+  	</select>
+  	
+  	<update id="updateByPrimaryKey" parameterType="com.pojo.WebSite">
+		update web_site 
+		set
+        	id = #{id,jdbcType=INTEGER},
+        	title = #{title,jdbcType=VARCHAR},
+        	cover_url = #{coverUrl,jdbcType=VARCHAR},
+        	price = #{price,jdbcType=VARCHAR},
+        	access_url = #{accessUrl,jdbcType=VARCHAR},
+        	fei_access_url = #{feiAccessUrl,jdbcType=VARCHAR},
+        	type = #{type,jdbcType=INTEGER},
+        	web_type = #{webType,jdbcType=VARCHAR},
+        	create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id = #{id} 
+	</update>
+</mapper>

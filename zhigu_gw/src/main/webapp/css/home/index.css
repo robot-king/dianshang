@@ -1,0 +1,174 @@
+/*自定义css样式*/
+.lvjing{
+	padding: 80px 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+}
+.mai-icon{
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: red;
+	color: #fff;
+	line-height: 40px;
+	text-align: center;
+	margin-right: 10px;
+}
+/*home*/
+#home{
+	padding: 0;
+	width: 100%; 
+	background: url(../../images/home-bg.jpg) no-repeat;
+	background-size: cover;
+	color: #fff;
+	text-align: center;
+}
+#home h1,#home p{
+	margin-bottom: 40px;
+}
+#home p{
+	line-height: 24px;
+}
+
+/*bbs*/
+#bbs{
+	text-align: center;
+}
+#bbs img{
+	margin: 0 auto;
+} 
+#bbs h3{
+	color: #666;
+	font-size: 20px;
+}
+#bbs p{
+	color: #999;
+	font-weight: 400;
+}
+@media (max-width: 414px) {
+	#bbs h3{
+		font-size: 14px;
+	}
+}
+/*html5*/
+#html5{
+	background: #F5F3F3;
+}
+#html5 .row>div{
+	margin-bottom: 15px;
+}
+#html5 h2{
+	margin: 0 0 20px 0;
+}
+#html5 p{
+	line-height: 30px;
+}
+
+/*course*/
+#course img{
+	margin: 0;
+	padding: 0;
+}
+
+/*app*/
+#app{
+	/*padding: 80px 0;*/
+}
+#app h2{
+	margin-bottom: 26px;
+}
+#app p{
+	line-height: 26px;
+}
+
+/*contact*/
+#contact{
+	padding: 0;
+	width: 100%; 
+	background: url(../../images/1da08c09f2ca04a38561ec4fe2301f6c.jpg) no-repeat;
+	background-size: cover;
+	color: #fff;
+}
+#contact .contact-text p{
+	margin-bottom: 20px;
+	line-height: 26px;
+	font-size: 16px;
+	color: #aaa;
+}
+#contact .form-control{
+	margin-bottom: 22px;
+	border: none;
+}
+#contact input{
+	height: 40px;
+}
+#contact input[type='submit']{
+	background: blue;
+	color: #fff;
+}
+#contact .lvjing{
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.anli-left,.anli-middle,.anli-right{
+	overflow: hidden;
+	height: 300px;
+	
+}
+.anli-left img,.anli-middle img,.anli-right img{
+	transition: all 2s;
+}
+.anli-left:hover img{
+	margin-top: -400px;
+}
+.anli-middle:hover img{
+	margin-top: -620px;
+}
+.anli-right:hover img{
+	margin-top: -400px;
+}
+/*右侧浮动栏*/
+.zside-bar{
+	position: fixed;
+	bottom: 0;
+	right: 0;
+}
+.qq,.weixin,.go-top{
+	position: relative;
+	right: 0;
+	width: 44px;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	color: #eee;
+	cursor: pointer;
+	background: rgba(234, 19, 19, 0.8);
+	margin-bottom: 1px;
+	transition: all 1s;
+}
+.qq:hover,.weixin:hover,.go-top:hover{
+	background: rgba(234, 19, 19, 1);
+}
+.weixin img,.qq img{
+	display: inline-block;
+	width: 22px;
+	line-height: 30px;
+	text-align: center; 
+}
+.qq img{
+	width: 18px;
+}
+.go-top span{
+	color: #eee;
+	font-size: 14px;
+}
+.wx-img{
+	position: relative;
+	top: 50%;
+	left: 50%;
+	width: 200px;
+	height: auto;
+	margin-left: -100px;
+	margin-top: -100px;
+}

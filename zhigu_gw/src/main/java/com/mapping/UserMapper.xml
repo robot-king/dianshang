@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.UserMapper">
+	<!-- 以下两个<cache>标签二选一,第一个可以不输出日志,第二个输出日志 -->  
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>-->  
+    <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+	<resultMap type="com.pojo.User" id="baseUser">
+		<id property="id" column="id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="nickName" column="nick_name" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="niMing" column="ni_ming" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="name" column="name" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="iconUrl" column="icon_url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="vipType" column="vip_type" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="loginStatus" column="login_status" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="comment" column="comment" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="money" column="money" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="balancePwd" column="balance_pwd" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="signature" column="signature" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="resource" column="resource" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="employeeId" column="employee_id" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="passedName" column="passed_name" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="national" column="national" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="province" column="province" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="customeUrl" column="custome_url" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="des" column="des" javaType="STRING" jdbcType="VARCHAR"/>
+		<result property="infoStatus" column="info_status" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="messageStatus" column="message_status" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="inventoryStatus" column="inventory_status" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="integration" column="integration" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="jingYanVal" column="jing_yan_val" javaType="INTEGER" jdbcType="INTEGER"/>
+		<result property="loginTime" column="login_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="createTime" column="create_time" javaType="DATE" jdbcType="TIMESTAMP"/>
+		<result property="mobile" column="identifier" javaType="STRING" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+	<sql id="baseUser">
+			nick_name,
+			ni_ming,
+			name,
+			icon_url,
+			vip_type,
+			login_status,
+			comment,
+			money,
+			balance_pwd,
+			signature,
+			resource,
+			employee_id,
+			passed_name,
+			national,
+			province,
+			custome_url,
+			des,
+			info_status,
+			message_status,
+			inventory_status,
+			integration,
+			jing_yan_val,
+			login_time,
+			create_time,
+		id
+	</sql>
+  	
+  	<select id="selectByPrimaryKey"  resultMap="baseUser">
+    	select <include refid="baseUser"/> from user where id = #{id} 
+  	</select>
+  	
+  	<select id="queryList"  resultMap="baseUser">
+    	select uu.*,ua.identifier from user uu
+    	left join user_auth ua on uu.id = ua.user_id 
+    	<where>
+    		and ua.identity_type = 2
+			<if test="id != null and id != '' ">  
+        		and uu.id = #{id} 
+    		</if>
+			<if test="nickName != null and nickName != '' ">  
+        		and uu.nick_name = #{nickName} 
+    		</if>
+    		<if test="niMing != null and niMing != '' ">
+				and uu.ni_ming like concat(concat('%',#{niMing} ),'%')  
+    		</if>
+			<if test="name != null and name != '' ">  
+        		and uu.name = #{name} 
+    		</if>
+    		<if test="mobile != null and mobile != '' ">  
+        		and ua.identifier = #{mobile} 
+    		</if>
+			<if test="iconUrl != null and iconUrl != '' ">  
+        		and uu.icon_url = #{iconUrl} 
+    		</if>
+			<if test="vipType != null and vipType != '' ">  
+        		and uu.vip_type = #{vipType} 
+    		</if>
+			<if test="loginStatus != null and loginStatus != '' ">  
+        		and uu.login_status = #{loginStatus} 
+    		</if>
+			<if test="comment != null and comment != '' ">  
+        		and uu.comment = #{comment} 
+    		</if>
+			<if test="money != null and money != '' ">  
+        		and uu.money = #{money} 
+    		</if>
+			<if test="balancePwd != null and balancePwd != '' ">  
+        		and uu.balance_pwd = #{balancePwd} 
+    		</if>
+			<if test="signature != null and signature != '' ">  
+        		and uu.signature = #{signature} 
+    		</if>
+			<if test="resource != null and resource != '' ">  
+        		and uu.resource = #{resource} 
+    		</if>
+			<if test="employeeId != null and employeeId != '' ">  
+        		and uu.employee_id = #{employeeId} 
+    		</if>
+			<if test="passedName != null and passedName != '' ">  
+        		and uu.passed_name = #{passedName} 
+    		</if>
+			<if test="national != null and national != '' ">  
+        		and uu.national = #{national} 
+    		</if>
+			<if test="province != null and province != '' ">  
+        		and uu.province = #{province} 
+    		</if>
+			<if test="customeUrl != null and customeUrl != '' ">  
+        		and uu.custome_url = #{customeUrl} 
+    		</if>
+			<if test="des != null and des != '' ">  
+        		and uu.des = #{des} 
+    		</if>
+			<if test="infoStatus != null and infoStatus != '' ">  
+        		and uu.info_status = #{infoStatus} 
+    		</if>
+			<if test="messageStatus != null and messageStatus != '' ">  
+        		and uu.message_status = #{messageStatus} 
+    		</if>
+			<if test="inventoryStatus != null and inventoryStatus != '' ">  
+        		and uu.inventory_status = #{inventoryStatus} 
+    		</if>
+			<if test="integration != null and integration != '' ">  
+        		and uu.integration = #{integration} 
+    		</if>
+    		<if test="jingYanVal != null and jingYanVal != '' ">  
+        		and uu.jing_yan_val = #{jingYanVal} 
+    		</if>
+			<if test="loginTime != null and loginTime != '' ">  
+        		and uu.login_time = #{loginTime} 
+    		</if>
+			<if test="createTime != null and createTime != '' ">  
+        		and uu.create_time = #{createTime} 
+    		</if>
+		</where>
+		order by uu.id desc
+  	</select>
+  	
+  	<insert id="insertSelective" parameterType="com.pojo.User" useGeneratedKeys="true" keyProperty="id" flushCache="true">
+    	insert into user 
+    	<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		id,
+	    		</if>
+				<if test="nickName != null and nickName != '' ">  
+	        		nick_name,
+	    		</if>
+				<if test="niMing != null and niMing != '' ">  
+	        		ni_ming,
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		name,
+	    		</if>
+				<if test="iconUrl != null and iconUrl != '' ">  
+	        		icon_url,
+	    		</if>
+				<if test="vipType != null and vipType != '' ">  
+	        		vip_type,
+	    		</if>
+				<if test="loginStatus != null and loginStatus != '' ">  
+	        		login_status,
+	    		</if>
+				<if test="comment != null and comment != '' ">  
+	        		comment,
+	    		</if>
+				<if test="money != null and money != '' ">  
+	        		money,
+	    		</if>
+				<if test="balancePwd != null and balancePwd != '' ">  
+	        		balance_pwd,
+	    		</if>
+				<if test="signature != null and signature != '' ">  
+	        		signature,
+	    		</if>
+				<if test="resource != null and resource != '' ">  
+	        		resource,
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		employee_id,
+	    		</if>
+				<if test="passedName != null and passedName != '' ">  
+	        		passed_name,
+	    		</if>
+				<if test="national != null and national != '' ">  
+	        		national,
+	    		</if>
+				<if test="province != null and province != '' ">  
+	        		province,
+	    		</if>
+				<if test="customeUrl != null and customeUrl != '' ">  
+	        		custome_url,
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		des,
+	    		</if>
+				<if test="infoStatus != null and infoStatus != '' ">  
+	        		info_status,
+	    		</if>
+				<if test="messageStatus != null and messageStatus != '' ">  
+	        		message_status,
+	    		</if>
+				<if test="inventoryStatus != null and inventoryStatus != '' ">  
+	        		inventory_status,
+	    		</if>
+				<if test="integration != null and integration != '' ">  
+	        		integration,
+	    		</if>
+	    		<if test="jingYanVal != null and jingYanVal != '' ">  
+	        		jing_yan_val,
+	    		</if>
+				<if test="loginTime != null and loginTime != '' ">  
+	        		login_time,
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time,
+	    		</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="id != null and id != '' ">  
+	        		#{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="nickName != null and nickName != '' ">  
+	        		#{nickName,jdbcType=VARCHAR},
+	    		</if>
+				<if test="niMing != null and niMing != '' ">  
+	        		#{niMing,jdbcType=VARCHAR},
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		#{name,jdbcType=VARCHAR},
+	    		</if>
+				<if test="iconUrl != null and iconUrl != '' ">  
+	        		#{iconUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="vipType != null and vipType != '' ">  
+	        		#{vipType,jdbcType=VARCHAR},
+	    		</if>
+				<if test="loginStatus != null and loginStatus != '' ">  
+	        		#{loginStatus,jdbcType=INTEGER},
+	    		</if>
+				<if test="comment != null and comment != '' ">  
+	        		#{comment,jdbcType=VARCHAR},
+	    		</if>
+				<if test="money != null and money != '' ">  
+	        		#{money,jdbcType=VARCHAR},
+	    		</if>
+				<if test="balancePwd != null and balancePwd != '' ">  
+	        		#{balancePwd,jdbcType=VARCHAR},
+	    		</if>
+				<if test="signature != null and signature != '' ">  
+	        		#{signature,jdbcType=VARCHAR},
+	    		</if>
+				<if test="resource != null and resource != '' ">  
+	        		#{resource,jdbcType=VARCHAR},
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		#{employeeId,jdbcType=INTEGER},
+	    		</if>
+				<if test="passedName != null and passedName != '' ">  
+	        		#{passedName,jdbcType=VARCHAR},
+	    		</if>
+				<if test="national != null and national != '' ">  
+	        		#{national,jdbcType=VARCHAR},
+	    		</if>
+				<if test="province != null and province != '' ">  
+	        		#{province,jdbcType=VARCHAR},
+	    		</if>
+				<if test="customeUrl != null and customeUrl != '' ">  
+	        		#{customeUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		#{des,jdbcType=VARCHAR},
+	    		</if>
+				<if test="infoStatus != null and infoStatus != '' ">  
+	        		#{infoStatus,jdbcType=INTEGER},
+	    		</if>
+				<if test="messageStatus != null and messageStatus != '' ">  
+	        		#{messageStatus,jdbcType=INTEGER},
+	    		</if>
+				<if test="inventoryStatus != null and inventoryStatus != '' ">  
+	        		#{inventoryStatus,jdbcType=INTEGER},
+	    		</if>
+				<if test="integration != null and integration != '' ">  
+	        		#{integration,jdbcType=INTEGER},
+	    		</if>
+	    		<if test="jingYanVal != null and jingYanVal != '' ">  
+	        		#{jingYanVal,jdbcType=INTEGER},
+	    		</if>
+				<if test="loginTime != null and loginTime != '' ">  
+	        		#{loginTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		#{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+		</trim>
+  	</insert>
+  	
+  	<update id="updateByPrimaryKeySelective" parameterType="com.pojo.User" flushCache="true">
+    	update user 
+    	<set>
+				<if test="id != null and id != '' ">  
+	        		id = #{id,jdbcType=INTEGER},
+	    		</if>
+				<if test="nickName != null and nickName != '' ">  
+	        		nick_name = #{nickName,jdbcType=VARCHAR},
+	    		</if>
+				<if test="niMing != null and niMing != '' ">  
+	        		ni_ming = #{niMing,jdbcType=VARCHAR},
+	    		</if>
+				<if test="name != null and name != '' ">  
+	        		name = #{name,jdbcType=VARCHAR},
+	    		</if>
+				<if test="iconUrl != null and iconUrl != '' ">  
+	        		icon_url = #{iconUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="vipType != null and vipType != '' ">  
+	        		vip_type = #{vipType,jdbcType=VARCHAR},
+	    		</if>
+				<if test="loginStatus != null and loginStatus != '' ">  
+	        		login_status = #{loginStatus,jdbcType=INTEGER},
+	    		</if>
+				<if test="comment != null and comment != '' ">  
+	        		comment = #{comment,jdbcType=VARCHAR},
+	    		</if>
+				<if test="money != null and money != '' ">  
+	        		money = #{money,jdbcType=VARCHAR},
+	    		</if>
+				<if test="balancePwd != null and balancePwd != '' ">  
+	        		balance_pwd = #{balancePwd,jdbcType=VARCHAR},
+	    		</if>
+				<if test="signature != null and signature != '' ">  
+	        		signature = #{signature,jdbcType=VARCHAR},
+	    		</if>
+				<if test="resource != null and resource != '' ">  
+	        		resource = #{resource,jdbcType=VARCHAR},
+	    		</if>
+				<if test="employeeId != null and employeeId != '' ">  
+	        		employee_id = #{employeeId,jdbcType=INTEGER},
+	    		</if>
+				<if test="passedName != null and passedName != '' ">  
+	        		passed_name = #{passedName,jdbcType=VARCHAR},
+	    		</if>
+				<if test="national != null and national != '' ">  
+	        		national = #{national,jdbcType=VARCHAR},
+	    		</if>
+				<if test="province != null and province != '' ">  
+	        		province = #{province,jdbcType=VARCHAR},
+	    		</if>
+				<if test="customeUrl != null and customeUrl != '' ">  
+	        		custome_url = #{customeUrl,jdbcType=VARCHAR},
+	    		</if>
+				<if test="des != null and des != '' ">  
+	        		des = #{des,jdbcType=VARCHAR},
+	    		</if>
+				<if test="infoStatus != null and infoStatus != '' ">  
+	        		info_status = #{infoStatus,jdbcType=INTEGER},
+	    		</if>
+				<if test="messageStatus != null and messageStatus != '' ">  
+	        		message_status = #{messageStatus,jdbcType=INTEGER},
+	    		</if>
+				<if test="inventoryStatus != null and inventoryStatus != '' ">  
+	        		inventory_status = #{inventoryStatus,jdbcType=INTEGER},
+	    		</if>
+				<if test="integration != null and integration != '' ">  
+	        		integration = #{integration,jdbcType=INTEGER},
+	    		</if>
+	    		<if test="jingYanVal != null and jingYanVal != '' ">  
+	        		jing_yan_val = #{jingYanVal,jdbcType=INTEGER},
+	    		</if>
+				<if test="loginTime != null and loginTime != '' ">  
+	        		login_time = #{loginTime,jdbcType=TIMESTAMP},
+	    		</if>
+				<if test="createTime != null and createTime != '' ">  
+	        		create_time = #{createTime,jdbcType=TIMESTAMP},
+	    		</if>
+    	</set>
+    	where id = #{id} 
+  	</update>
+  	
+  	<delete id="delete" parameterType="com.pojo.User" flushCache="true">
+    	delete from  user where id = #{id} 
+  	</delete>
+  	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		delete from  user where id = #{id} 
+	</delete>
+	
+	<!-- 批量修改 -->
+	<update id="updateByIds" parameterType="hashmap">
+        update user 
+		set status = #{status} where id in
+		
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</update>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteByIds" parameterType="string">
+        delete from user where id in
+        
+		<foreach collection="ids" item="id" open="(" separator=","
+			close=")">#{ id}
+		</foreach>
+	</delete>
+	
+	<!-- 非好友用户 -->
+	<select id="queryNotFriendList"  resultMap="baseUser" >
+    	SELECT
+			*
+		FROM
+			user uu
+		WHERE
+			uu.id != #{id}
+		AND uu.id NOT IN (
+			SELECT
+				f1.user_id
+			FROM
+				friends f1
+			where f1.friend_id = #{id}
+		)
+		AND uu.id NOT IN (
+			SELECT
+				f1.friend_id
+			FROM
+				friends f1
+			where f1.user_id = #{id}
+		)
+		<if test="nickName != null and nickName != '' ">  
+       		AND (uu.nick_name like concat('%',concat(#{nickName},'%')) or uu.ni_ming like concat('%',concat(#{nickName},'%')))
+   		</if>
+  	</select>
+</mapper>
